@@ -83,14 +83,6 @@ body {
   container-type: inline-size;
 }
 
-.is-content .card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.5) 100%);
-}
-
 /* ---------- Caption ---------- */
 .caption {
   position: absolute;
@@ -207,6 +199,38 @@ body {
   text-align: center;
 }
 
+/* Spinning record = the reel's sound, and the mute toggle */
+.disc {
+  width: 42px;
+  height: 42px;
+  margin-top: 2px;
+  padding: 0;
+  border-radius: 50%;
+  border: 6px solid #222;
+  background: radial-gradient(circle, var(--disc, #444) 0 30%, #1a1a1a 32%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: spin 4s linear infinite;
+}
+
+.disc svg {
+  display: none;
+  width: 18px;
+  height: 18px;
+}
+
+#app.muted .disc {
+  animation: none;
+  background: #1a1a1a;
+}
+
+#app.muted .disc svg {
+  display: block;
+}
+
 /* ---------- Intro card (TikTok text post) ---------- */
 .is-intro .card {
   background: var(--accent);
@@ -241,110 +265,56 @@ body {
   box-decoration-break: clone;
 }
 
-/* ---------- Ad reel ---------- */
-.pitch-media {
+/* ---------- Ad reel (TikTok promoted post) ---------- */
+.is-content .card::after,
+.is-pitch .card::after {
+  content: "";
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.5) 100%);
 }
 
 .pitch-hero {
+  position: absolute;
+  inset: 0 64px 190px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  text-align: center;
-  padding: 0 24px 120px;
-}
-
-.pitch-hero-icon {
-  width: 104px;
-  height: 104px;
-  border-radius: 30px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  display: flex;
-  align-items: center;
   justify-content: center;
+  gap: 12px;
+  text-align: center;
   color: #fff;
-}
-
-.pitch-hero-icon svg {
-  width: 50px;
-  height: 50px;
-}
-
-.pitch-hero-brand {
-  font-size: 30px;
+  font-size: 34px;
   font-weight: 900;
   letter-spacing: -1px;
-  color: #fff;
 }
 
-.pitch-footer {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 40px 14px 16px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.72) 45%);
+.pitch-hero svg {
+  width: 68px;
+  height: 68px;
+  opacity: 0.9;
 }
 
-.pitch-brand-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.pitch-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.14);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-}
-
-.pitch-avatar svg {
-  width: 18px;
-  height: 18px;
-}
-
-.pitch-name {
-  font-size: 15px;
-  font-weight: 800;
-}
-
-.pitch-name small {
-  display: block;
-  font-size: 11px;
+.pitch-label {
+  font-size: 12px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.pitch-title {
-  margin: 0 0 14px;
-  font-size: 20px;
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: -0.4px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .pitch-cta {
+  display: block;
   width: 100%;
-  padding: 14px;
+  margin-top: 12px;
+  padding: 11px;
   border: none;
-  border-radius: 10px;
-  background: #fff;
-  color: #111;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
   font-family: inherit;
   font-size: 15px;
   font-weight: 800;
+  text-shadow: none;
   cursor: default;
 }
 
@@ -434,11 +404,6 @@ body {
 
 .is-pitch.blocked:not(.closed) .pitch-x {
   animation: bump 0.45s ease, xpulse 1.1s ease-in-out 0.45s infinite;
-}
-
-/* On phones the rail would sit on the ad's CTA; it only shows beside the card on desktop */
-.is-pitch .rail {
-  display: none;
 }
 
 /* ---------- Dock (bottom bar) ---------- */
@@ -683,6 +648,10 @@ body {
 .primary:active { transform: scale(0.98); }
 
 /* ---------- anims ---------- */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 @keyframes xpulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(254, 44, 85, 0.7); }
   50% { box-shadow: 0 0 0 10px rgba(254, 44, 85, 0); }
@@ -737,9 +706,7 @@ body {
     right: 16px;
   }
 
-  .rail,
-  .is-pitch .rail {
-    display: flex;
+  .rail {
     position: static;
     align-self: flex-end;
     margin-bottom: 6px;
@@ -764,7 +731,8 @@ body {
     filter: none;
   }
 
-  .tt-lines {
+  .tt-lines,
+  .pitch-hero {
     right: 16px;
   }
 }

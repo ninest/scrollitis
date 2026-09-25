@@ -15,9 +15,6 @@
       --line: rgba(255, 255, 255, 0.08);
       --accent: #fe2c55;
       --cyan: #25f4ee;
-      --card: #fe2c55;
-      --card-2: #fe2c55;
-      --peek: #2a1f5c;
     }
 
     * { box-sizing: border-box; }
@@ -51,71 +48,9 @@
       line-height: 1.55;
     }
 
-    /* ---------- controls ---------- */
-    .controls {
-      margin: 28px 0 36px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px 36px;
-      padding: 18px 0;
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .ctrl {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .ctrl-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .seg {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .seg button {
-      font: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      color: #d7d9e0;
-      background: #161616;
-      border: 1px solid #262626;
-      border-radius: 999px;
-      padding: 7px 13px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-    }
-
-    .seg button:hover { border-color: #3a3a3a; }
-
-    .seg button[aria-pressed="true"] {
-      background: #fff;
-      color: #0a0a0a;
-      border-color: #fff;
-    }
-
-    .seg svg { width: 15px; height: 15px; }
-
-    .swatch {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-    }
-
     /* ---------- grid ---------- */
     .grid {
+      margin-top: 28px;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 48px 28px;
@@ -127,20 +62,8 @@
       max-width: 340px;
     }
 
-    .v-head {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .v-letter {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--accent);
-    }
-
     .v-name {
+      margin-bottom: 14px;
       font-size: 17px;
       font-weight: 800;
       letter-spacing: -0.2px;
@@ -212,7 +135,7 @@
       margin: 0 6px;
       border-radius: 18px;
       overflow: hidden;
-      background: var(--card);
+      background: var(--accent);
     }
 
     .card::after {
@@ -339,25 +262,6 @@
 
     .sound svg { width: 13px; height: 13px; flex: none; }
 
-    .progress {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 2px;
-      background: rgba(255, 255, 255, 0.25);
-      z-index: 3;
-    }
-
-    .progress::before {
-      content: "";
-      display: block;
-      height: 100%;
-      width: 0;
-      background: #fff;
-      animation: prog 5s linear infinite;
-    }
-
     /* bottom dock */
     .dock {
       flex: none;
@@ -410,41 +314,7 @@
 
     .tt-plus svg { width: 16px; height: 16px; }
 
-    /* ---------- A: paused video ---------- */
-    .a-center {
-      position: absolute;
-      inset: 0 0 90px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      padding: 0 60px 0 16px;
-    }
-
-    .a-word {
-      font-size: 34px;
-      font-weight: 900;
-      letter-spacing: -1.4px;
-      line-height: 1;
-      text-align: center;
-    }
-
-    .a-play {
-      width: 64px;
-      height: 64px;
-      color: rgba(255, 255, 255, 0.9);
-      filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.25));
-    }
-
-    .a-tap {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.4px;
-      opacity: 0.85;
-    }
-
-    /* ---------- B: text post ---------- */
+    /* ---------- text post ---------- */
     .b-center {
       position: absolute;
       inset: 0 0 110px;
@@ -471,132 +341,61 @@
       box-decoration-break: clone;
     }
 
-    .tt-text.alt {
-      background: #111;
-      color: #fff;
-    }
+    /* ---------- current screens ---------- */
+    .scrn .b-center { inset: 0 0 130px; }
 
-    /* ---------- C: swipe up / feed peek ---------- */
-    .c-stack {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin: 0 6px;
-      min-height: 0;
-    }
-
-    .c-stack .card { margin: 0; }
-
-    .peek {
-      flex: none;
-      height: 30px;
-      border-radius: 18px 18px 0 0;
-      background: var(--peek);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .peek::after {
-      content: "";
+    .scrub {
       position: absolute;
-      top: 10px;
-      left: 12px;
-      width: 70px;
-      height: 8px;
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.25);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.22);
+      z-index: 3;
     }
 
-    .c-title {
+    .scrub i {
+      display: block;
+      height: 100%;
+      background: #fff;
+    }
+
+    .stat.timer b {
+      font-size: 26px;
+      letter-spacing: -1px;
+    }
+
+    .scrn-x {
       position: absolute;
-      left: 14px;
-      right: 70px;
-      top: 50%;
-      transform: translateY(-60%);
-    }
-
-    .c-word {
-      font-size: 46px;
-      font-weight: 900;
-      letter-spacing: -2.2px;
-      line-height: 0.92;
-    }
-
-    .c-sub {
-      margin: 14px 0 0;
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 1.4;
-      opacity: 0.92;
-    }
-
-    .swipe {
-      position: absolute;
-      left: 50%;
-      bottom: 16px;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.4px;
-      animation: bob 1.6s ease-in-out infinite;
-      z-index: 2;
-    }
-
-    .swipe svg { width: 22px; height: 22px; }
-
-    .c-dock {
-      flex: none;
-      height: 58px;
+      top: 12px;
+      right: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      background: rgba(0, 0, 0, 0.55);
+      box-shadow: 0 0 0 6px rgba(254, 44, 85, 0.35);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 0 12px 8px;
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--muted);
+      z-index: 4;
     }
 
-    .c-dock b { color: #fff; font-weight: 800; }
-    .c-dock .dot { opacity: 0.5; }
+    .scrn-x svg { width: 19px; height: 19px; }
 
-    /* ---------- D: rail as scoreboard ---------- */
-    .d-cta {
-      flex: none;
-      margin: 10px 6px 0;
-      height: 50px;
-      border-radius: 12px;
-      border: none;
-      background: var(--accent);
-      color: #fff;
-      font: inherit;
-      font-size: 16px;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 16px;
-      cursor: pointer;
+    .scrn-hint {
+      position: absolute;
+      top: 64px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.55);
+      font-size: 11.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      z-index: 4;
     }
-
-    .d-cta svg { width: 18px; height: 18px; }
-
-    .d-foot {
-      flex: none;
-      height: 30px;
-    }
-
-    .rail-item.stat-item b {
-      font-size: 15px;
-      font-weight: 800;
-      line-height: 1;
-    }
-
-    .rail-item.stat-item svg { width: 28px; height: 28px; }
 
     /* ---------- sections ---------- */
     .sec { margin-top: 56px; }
@@ -871,11 +670,6 @@
       to { transform: scaleY(1); }
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes prog { to { width: 100%; } }
-    @keyframes bob {
-      0%, 100% { transform: translate(-50%, 0); }
-      50% { transform: translate(-50%, -6px); }
-    }
 
     @media (prefers-reduced-motion: reduce) {
       * { animation: none !important; }
@@ -886,8 +680,104 @@
   <div class="page">
     <header>
       <h1>Scrollitis story</h1>
-      <p>Design explorations for the game. Nothing here ships until it's picked.</p>
+      <p>What the game looks like right now, followed by explorations that haven't shipped yet. Use it as the baseline when we iterate.</p>
     </header>
+
+    <!-- Current screens -->
+    <section class="sec" id="screens">
+      <div class="sec-head">
+        <h2>Current screens</h2>
+        <p>What ships today. The start screen is a TikTok text post, and a run is a feed of reels with an ad every 4 to 6 reels. Update this section whenever the game changes.</p>
+      </div>
+      <div class="grid">
+
+        <section class="variant">
+          <div class="v-name">Start screen</div>
+          <div class="phone scrn">
+            <div class="status"><span>9:41</span><span class="status-r"><i></i></span></div>
+            <div class="card">
+              <div class="b-center">
+                <div><span class="tt-text">you get 10 seconds.</span></div>
+                <div><span class="tt-text">scroll as far as you can.</span></div>
+              </div>
+              <div class="caption">
+                <div class="handle">@scrollitis</div>
+                <p>how far can you get? <span class="tags">#fyp #scrollitis</span></p>
+                <div class="sound" data-icon="music"><span>original sound · scrollitis</span></div>
+              </div>
+              <div class="rail" data-rail="chevrons-down" data-avatar-bg="#000"></div>
+            </div>
+            <div class="dock">
+              <div class="stat"><b>42</b><span>best</span></div>
+              <button class="tt-plus" type="button" data-icon="play-sm">Play</button>
+              <div class="stat"><b>17</b><span>last run</span></div>
+            </div>
+          </div>
+          <ul class="notes">
+            <li>The intro is the first reel of the feed. <b>Scrolling past it starts the run</b>, and Play does the same.</li>
+            <li>The bottom bar's "+" button becomes Play, with the cyan and red edges.</li>
+            <li>Best and last run are saved on the device.</li>
+          </ul>
+        </section>
+
+        <section class="variant">
+          <div class="v-name">During a run: reel</div>
+          <div class="phone scrn">
+            <div class="status"><span>9:41</span><span class="status-r"><i></i></span></div>
+            <div class="card" style="background:linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)">
+              <div class="caption">
+                <div class="handle">@nightowl.nina</div>
+                <p>POV: you should be sleeping <span class="tags">#2am</span></p>
+                <div class="sound" data-icon="music"><span>original sound · nightowl.nina</span></div>
+              </div>
+              <div class="rail" data-rail="N" data-avatar-bg="#5f27cd"></div>
+              <div class="scrub"><i style="width:64%"></i></div>
+            </div>
+            <div class="dock">
+              <div class="stat"><b>12</b><span>reels</span></div>
+              <div class="stat timer"><b>6.4</b><span>seconds</span></div>
+              <div class="stat"><b>2</b><span>ads skipped</span></div>
+            </div>
+          </div>
+          <ul class="notes">
+            <li>Reels are a gradient with a random caption. The score is the number of reels you get past.</li>
+            <li>The <b>scrub line on the card is the clock</b>. It turns amber at 2 seconds and red at 1.</li>
+            <li>The bottom bar swaps to reels, seconds left and ads skipped.</li>
+          </ul>
+        </section>
+
+        <section class="variant">
+          <div class="v-name">During a run: ad</div>
+          <div class="phone scrn">
+            <div class="status"><span>9:41</span><span class="status-r"><i></i></span></div>
+            <div class="card" style="background:linear-gradient(160deg, #3a2c1e 0%, #17100a 100%)">
+              <div class="sf-pitch-hero" data-icon="coffee">Sipstream</div>
+              <div class="scrn-x" data-icon="x"></div>
+              <div class="scrn-hint">Ad · tap ✕ to keep scrolling</div>
+              <div class="caption">
+                <div class="handle">Sipstream</div>
+                <p>Wake up without the doom <span class="sf-tagline">Sponsored</span></p>
+                <div class="sound" data-icon="music"><span>Promoted music</span></div>
+                <div class="sf-pitch-cta">Order now</div>
+              </div>
+              <div class="rail" data-rail="coffee" data-avatar-bg="#1c1c1f"></div>
+              <div class="scrub"><i style="width:38%"></i></div>
+            </div>
+            <div class="dock">
+              <div class="stat"><b>13</b><span>reels</span></div>
+              <div class="stat timer"><b>3.8</b><span>seconds</span></div>
+              <div class="stat"><b>2</b><span>ads skipped</span></div>
+            </div>
+          </div>
+          <ul class="notes">
+            <li>Laid out like a TikTok promoted post, with a <b>red CTA bar under the caption</b>.</li>
+            <li>The feed ends at the ad until you tap ✕, which is in a random top corner. Closing it gives <b>+1 second</b>.</li>
+            <li>Scrolling while stuck shakes the hint and bumps the ✕.</li>
+          </ul>
+        </section>
+
+      </div>
+    </section>
 
     <!-- Feed sounds -->
     <section class="sec snd" id="sounds">
@@ -912,153 +802,9 @@
       </div>
     </section>
 
-    <section class="sec">
-    <div class="sec-head">
-      <h2>Start screen: variants</h2>
-      <p>Four takes on the start screen as a TikTok-style card: black screen, one post, action rail on the right, stats at the bottom so the top stays clean. The toggles change every phone at once, so you can compare names, marks and colors across layouts.</p>
-    </div>
-
-    <div class="controls">
-      <div class="ctrl">
-        <span class="ctrl-label">Name</span>
-        <div class="seg" data-ctrl="name"></div>
-      </div>
-      <div class="ctrl">
-        <span class="ctrl-label">Mark</span>
-        <div class="seg" data-ctrl="mark"></div>
-      </div>
-      <div class="ctrl">
-        <span class="ctrl-label">Card color</span>
-        <div class="seg" data-ctrl="color"></div>
-      </div>
-    </div>
-
-    <div class="grid">
-
-      <!-- A -->
-      <section class="variant">
-        <div class="v-head"><span class="v-letter">A</span><span class="v-name">Paused video</span></div>
-        <div class="phone">
-          <div class="status"><span>9:41</span><span class="status-r"><i></i></span></div>
-          <div class="card">
-            <div class="a-center">
-              <div class="a-word js-name">Doomscroll</div>
-              <svg class="a-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z" /></svg>
-              <div class="a-tap">Tap to play</div>
-            </div>
-            <div class="caption">
-              <div class="handle js-handle">@doomscroll</div>
-              <p>5 seconds on the clock. Scroll as far as you can. Ads block the feed, so tap ✕ to skip them and win +1s.</p>
-              <div class="sound" data-icon="music"><span class="js-sound">original sound · doomscroll</span></div>
-            </div>
-            <div class="rail" data-rail="deco"></div>
-            <div class="progress"></div>
-          </div>
-          <div class="dock">
-            <div class="stat"><b>42</b><span>best</span></div>
-            <div class="stat"><b>17</b><span>last run</span></div>
-            <div class="stat"><b>6</b><span>ads skipped</span></div>
-          </div>
-        </div>
-        <ul class="notes">
-          <li>Looks like a video that hasn't started yet. <b>The whole card is the button.</b></li>
-          <li>The caption is the description, written as three short sentences.</li>
-          <li>The progress line hints at the 5-second clock.</li>
-        </ul>
-      </section>
-
-      <!-- B -->
-      <section class="variant">
-        <div class="v-head"><span class="v-letter">B</span><span class="v-name">Text post</span><span class="v-letter" style="color:var(--cyan)">shipped</span></div>
-        <div class="phone">
-          <div class="status"><span>9:41</span><span class="status-r"><i></i></span></div>
-          <div class="card">
-            <div class="b-center">
-              <div><span class="tt-text">you get 5 seconds.</span></div>
-              <div><span class="tt-text">scroll as far as you can.</span></div>
-              <div><span class="tt-text alt">ads freeze the feed.</span></div>
-              <div><span class="tt-text">tap ✕ for +1 second.</span></div>
-            </div>
-            <div class="caption">
-              <div class="handle js-handle">@doomscroll</div>
-              <p>how far can you get? <span class="tags">#fyp #skipad</span></p>
-              <div class="sound" data-icon="music"><span class="js-sound">original sound · doomscroll</span></div>
-            </div>
-            <div class="rail" data-rail="deco"></div>
-          </div>
-          <div class="dock">
-            <div class="stat"><b>42</b><span>best</span></div>
-            <button class="tt-plus" data-icon="play-sm">Play</button>
-            <div class="stat"><b>17</b><span>last run</span></div>
-          </div>
-        </div>
-        <ul class="notes">
-          <li>Uses TikTok's <b>text-on-color post</b> style for the rules, so it reads as a post and not a menu.</li>
-          <li>The bottom bar's <b>"+" button becomes Play</b>, with the cyan and red edges.</li>
-          <li>The name only appears as the @handle, which is the quietest option.</li>
-        </ul>
-      </section>
-
-      <!-- C -->
-      <section class="variant">
-        <div class="v-head"><span class="v-letter">C</span><span class="v-name">Swipe to start</span></div>
-        <div class="phone">
-          <div class="status"><span>9:41</span><span class="status-r"><i></i></span></div>
-          <div class="c-stack">
-            <div class="card">
-              <div class="c-title">
-                <div class="c-word js-name js-break">Doom<br>scroll</div>
-                <p class="c-sub">Scroll as far as you can in 5 seconds. Skip ads for extra time.</p>
-              </div>
-              <div class="rail" data-rail="deco-short"></div>
-              <div class="swipe" data-icon="chevron-up"><span>Swipe up to start</span></div>
-            </div>
-            <div class="peek"></div>
-          </div>
-          <div class="c-dock">
-            <span>Best <b>42</b></span><span class="dot">·</span>
-            <span>Last <b>17</b></span><span class="dot">·</span>
-            <span><b>6</b> ads skipped</span>
-          </div>
-        </div>
-        <ul class="notes">
-          <li><b>No button.</b> The first swipe starts the game and the clock, which teaches the controls.</li>
-          <li>The next reel peeks out below the card, so it's obvious there's more to scroll.</li>
-          <li>Big wordmark, one-line description, stats on one line at the bottom.</li>
-        </ul>
-      </section>
-
-      <!-- D -->
-      <section class="variant">
-        <div class="v-head"><span class="v-letter">D</span><span class="v-name">Rail scoreboard</span></div>
-        <div class="phone">
-          <div class="status"><span>9:41</span><span class="status-r"><i></i></span></div>
-          <div class="card">
-            <div class="a-center">
-              <div class="a-word js-name">Doomscroll</div>
-              <div class="a-tap" style="max-width:200px;text-align:center;line-height:1.45;font-weight:600">Scroll as far as you can in 5 seconds. Close ads for +1s.</div>
-            </div>
-            <div class="caption">
-              <div class="handle js-handle">@doomscroll</div>
-              <p>your stats are on the right →</p>
-              <div class="sound" data-icon="music"><span class="js-sound">original sound · doomscroll</span></div>
-            </div>
-            <div class="rail" data-rail="stats"></div>
-          </div>
-          <button class="d-cta"><span>Start scrolling</span><span data-icon="chevron-right"></span></button>
-          <div class="d-foot"></div>
-        </div>
-        <ul class="notes">
-          <li>The rail counts are your stats: <b>♥ = best, ✕ = ads skipped, ↻ = runs</b>.</li>
-          <li>The bottom has one full-width CTA in the style of a TikTok ad's "Shop now" bar.</li>
-          <li>Better if you want one obvious button. It looks the least like a real post.</li>
-        </ul>
-      </section>
-
-    </div>
-    </section>
   </div>
 
+  <script src="../music.js"></script>
   <script src="sounds.js"></script>
   <script>
     (() => {
@@ -1069,13 +815,9 @@
         "bookmark": '<path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z" />',
         "forward": '<polyline points="15 17 20 12 15 7" /><path d="M4 18v-2a4 4 0 0 1 4-4h12" />',
         "music": '<path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />',
-        "chevron-up": '<path d="m18 15-6-6-6 6" />',
-        "chevron-right": '<path d="m9 18 6-6-6-6" />',
         "x": '<path d="M18 6 6 18" /><path d="m6 6 12 12" />',
-        "rotate-cw": '<path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" /><path d="M21 3v5h-5" />',
-        "infinity": '<path d="M6 16c5 0 7-8 12-8a4 4 0 0 1 0 8c-5 0-7-8-12-8a4 4 0 1 0 0 8" />',
-        "chevrons-down": '<path d="m7 6 5 5 5-5" /><path d="m7 13 5 5 5-5" />',
-        "timer": '<line x1="10" x2="14" y1="2" y2="2" /><line x1="12" x2="15" y1="14" y2="11" /><circle cx="12" cy="14" r="8" />'
+        "coffee": '<path d="M10 2v2" /><path d="M14 2v2" /><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1" /><path d="M6 2v2" />',
+        "chevrons-down": '<path d="m7 6 5 5 5-5" /><path d="m7 13 5 5 5-5" />'
       };
 
       const svg = (name, opts = {}) => {
@@ -1084,119 +826,30 @@
         return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" ' + fill + ' stroke-width="' + sw + '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + P[name] + "</svg>";
       };
 
-      const NAMES = [
-        { name: "Scrollitis", handle: "scrollitis", br: "Scroll<br>itis" },
-        { name: "Doomscroll", handle: "doomscroll", br: "Doom<br>scroll" },
-        { name: "Just One More", handle: "justonemore", br: "Just one<br>more" },
-        { name: "Skip Ad", handle: "skipad", br: "Skip<br>ad" },
-        { name: "5 Seconds", handle: "5seconds", br: "5<br>seconds" },
-        { name: "Doom Scroller", handle: "doomscroller", br: "Doom<br>Scroller" }
-      ];
-
-      const MARKS = [
-        { id: "infinity", label: "Infinity" },
-        { id: "chevrons-down", label: "Chevrons" },
-        { id: "timer", label: "Timer" },
-        { id: "mono", label: "Monogram" }
-      ];
-
-      const COLORS = [
-        { id: "red", label: "Red", card: "#fe2c55", peek: "#2a1f5c" },
-        { id: "indigo", label: "Indigo", card: "#3b2a8f", peek: "#fe2c55" },
-        { id: "teal", label: "Teal", card: "linear-gradient(160deg, #1fb5b0 0%, #0c5f73 100%)", peek: "#fe2c55" },
-        { id: "ink", label: "Ink", card: "#1c1c1f", peek: "#fe2c55" }
-      ];
-
-      const state = { name: 0, mark: 1, color: 0 };
-      try {
-        Object.assign(state, JSON.parse(localStorage.getItem("story-state-v2") || "{}"));
-      } catch (e) {}
-
-      function markHtml() {
-        const m = MARKS[state.mark];
-        if (m.id === "mono") return '<span class="mono">' + NAMES[state.name].name[0] + "</span>";
-        return svg(m.id, { sw: 2.4 });
-      }
-
-      function railDeco(short) {
-        return (
-          '<div class="avatar">' + markHtml() + "</div>" +
+      document.querySelectorAll("[data-rail]").forEach((el) => {
+        const mark = el.dataset.rail;
+        el.innerHTML =
+          '<div class="avatar" style="background:' + el.dataset.avatarBg + '">' +
+          (P[mark] ? svg(mark, { sw: 2.4 }) : '<span class="mono">' + mark + "</span>") + "</div>" +
           '<div class="rail-item">' + svg("heart", { fill: true }) + "<span>1.2M</span></div>" +
           '<div class="rail-item">' + svg("message-circle", { fill: true }) + "<span>8,431</span></div>" +
-          (short ? "" : '<div class="rail-item">' + svg("bookmark", { fill: true }) + "<span>92K</span></div>") +
-          '<div class="rail-item">' + svg("forward", { sw: 2.4 }) + "<span>Share</span></div>" +
-          (short ? "" : '<div class="disc"></div>')
-        );
-      }
-
-      function railStats() {
-        return (
-          '<div class="avatar">' + markHtml() + "</div>" +
-          '<div class="rail-item stat-item">' + svg("heart", { fill: true }) + "<b>42</b><small>best</small></div>" +
-          '<div class="rail-item stat-item">' + svg("x", { sw: 3 }) + "<b>6</b><small>skipped</small></div>" +
-          '<div class="rail-item stat-item">' + svg("rotate-cw", { sw: 2.4 }) + "<b>23</b><small>runs</small></div>" +
-          '<div class="disc"></div>'
-        );
-      }
-
-      function render() {
-        const n = NAMES[state.name];
-        const c = COLORS[state.color];
-
-        document.documentElement.style.setProperty("--card", c.card);
-        document.documentElement.style.setProperty("--peek", c.peek);
-
-        document.querySelectorAll(".js-name").forEach((el) => {
-          el.innerHTML = el.classList.contains("js-break") ? n.br : n.name;
-        });
-        document.querySelectorAll(".js-handle").forEach((el) => (el.textContent = "@" + n.handle));
-        document.querySelectorAll(".js-sound").forEach((el) => (el.textContent = "original sound · " + n.handle));
-
-        document.querySelectorAll('[data-rail="deco"]').forEach((el) => (el.innerHTML = railDeco(false)));
-        document.querySelectorAll('[data-rail="deco-short"]').forEach((el) => (el.innerHTML = railDeco(true)));
-        document.querySelectorAll('[data-rail="stats"]').forEach((el) => (el.innerHTML = railStats()));
-
-        document.querySelectorAll(".seg").forEach((seg) => {
-          const key = seg.dataset.ctrl;
-          seg.querySelectorAll("button").forEach((b, i) => b.setAttribute("aria-pressed", String(i === state[key])));
-        });
-
-        try { localStorage.setItem("story-state-v2", JSON.stringify(state)); } catch (e) {}
-      }
-
-      function buildSeg(key, items, labelFn) {
-        const seg = document.querySelector('.seg[data-ctrl="' + key + '"]');
-        items.forEach((item, i) => {
-          const b = document.createElement("button");
-          b.type = "button";
-          b.innerHTML = labelFn(item);
-          b.addEventListener("click", () => {
-            state[key] = i;
-            render();
-          });
-          seg.appendChild(b);
-        });
-      }
-
-      buildSeg("name", NAMES, (n) => n.name);
-      buildSeg("mark", MARKS, (m) => (m.id === "mono" ? '<b style="font-weight:900">D</b>' : svg(m.id)) + m.label);
-      buildSeg("color", COLORS, (c) => '<span class="swatch" style="background:' + c.card + '"></span>' + c.label);
+          '<div class="rail-item">' + svg("bookmark", { fill: true }) + "<span>92K</span></div>" +
+          '<div class="rail-item">' + svg("forward", { sw: 2.4 }) + "<span>Share</span></div>";
+      });
 
       // static icons
       document.querySelectorAll("[data-icon]").forEach((el) => {
         const name = el.dataset.icon;
         if (name === "play-sm") {
           el.insertAdjacentHTML("afterbegin", '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z" /></svg>');
-        } else if (name === "chevron-up") {
-          el.insertAdjacentHTML("afterbegin", svg(name, { sw: 2.6 }));
-        } else if (name === "chevron-right") {
+        } else if (name === "x") {
           el.innerHTML = svg(name, { sw: 2.6 });
+        } else if (name === "coffee") {
+          el.insertAdjacentHTML("afterbegin", svg(name, { sw: 1.6 }));
         } else {
           el.insertAdjacentHTML("afterbegin", svg(name));
         }
       });
-
-      render();
     })();
   </script>
 </body>

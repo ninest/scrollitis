@@ -9,6 +9,7 @@
     "forward": '<polyline points="15 17 20 12 15 7" /><path d="M4 18v-2a4 4 0 0 1 4-4h12" />',
     "chevrons-down": '<path d="m7 6 5 5 5-5" /><path d="m7 13 5 5 5-5" />',
     "x": '<path d="M18 6 6 18" /><path d="m6 6 12 12" />',
+    "volume-x": '<path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" /><line x1="22" x2="16" y1="9" y2="15" /><line x1="16" x2="22" y1="9" y2="15" />',
     "music": '<path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />',
     "coffee": '<path d="M10 2v2" /><path d="M14 2v2" /><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1" /><path d="M6 2v2" />',
     "shirt": '<path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />',
@@ -27,6 +28,13 @@
 
   const START_TIME = 10;
   const STORE_KEY = "scrollitis:stats";
+  const SOUND_KEY = "scrollitis:sound";
+
+  // Every reel has its own looping track (music.js), like TikTok. Ads get the jingle.
+  const music = window.ScrollitisMusic;
+  const SONGS = music.tracks.filter((t) => !t.pitch);
+  const JINGLE = music.tracks.find((t) => t.pitch);
+  const INTRO_SONG = SONGS[0];
 
   const app = document.getElementById("app");
   const feed = document.getElementById("feed");
@@ -116,6 +124,9 @@
   let rank = 0;
   let lastTs = 0;
   let stats = loadStats();
+  let lastSong = INTRO_SONG;
+  let soundOn = loadSound();
+  let playingReel = null;
 
   function loadStats() {
     try {
@@ -123,6 +134,14 @@
       if (s && typeof s.best === "number") return s;
     } catch (e) {}
     return { best: 0, last: null };
+  }
+
+  function loadSound() {
+    try {
+      return localStorage.getItem(SOUND_KEY) !== "off";
+    } catch (e) {
+      return true;
+    }
   }
 
   function saveStats() {
@@ -144,6 +163,12 @@
     return arr[Math.floor(Math.random() * arr.length)];
   }
 
+  // Never the same track twice in a row
+  function pickSong() {
+    lastSong = pick(SONGS.filter((t) => t !== lastSong));
+    return lastSong;
+  }
+
   function nextType() {
     if (sinceAd < nextAdAfter) {
       sinceAd++;
@@ -154,24 +179,26 @@
     return "ad";
   }
 
-  function railHtml(avatar, avatarBg) {
+  // The spinning record at the bottom of the rail is the mute toggle, as on TikTok.
+  function railHtml(avatar, avatarBg, discColor) {
     return (
-      '<div class="rail" aria-hidden="true">' +
-      '<div class="avatar" style="background:' + avatarBg + '">' + avatar + "</div>" +
-      '<div class="rail-btn"><span class="ic">' + icon("heart", { fill: true }) + "</span><span>" + rand(1, 999) + "K</span></div>" +
-      '<div class="rail-btn"><span class="ic">' + icon("message-circle", { fill: true }) + "</span><span>" + rand(12, 9999).toLocaleString() + "</span></div>" +
-      '<div class="rail-btn"><span class="ic">' + icon("bookmark", { fill: true }) + "</span><span>" + rand(1, 999) + "K</span></div>" +
-      '<div class="rail-btn"><span class="ic">' + icon("forward", { sw: 2.4 }) + "</span><span>Share</span></div>" +
+      '<div class="rail">' +
+      '<div class="avatar" aria-hidden="true" style="background:' + avatarBg + '">' + avatar + "</div>" +
+      '<div class="rail-btn" aria-hidden="true"><span class="ic">' + icon("heart", { fill: true }) + "</span><span>" + rand(1, 999) + "K</span></div>" +
+      '<div class="rail-btn" aria-hidden="true"><span class="ic">' + icon("message-circle", { fill: true }) + "</span><span>" + rand(12, 9999).toLocaleString() + "</span></div>" +
+      '<div class="rail-btn" aria-hidden="true"><span class="ic">' + icon("bookmark", { fill: true }) + "</span><span>" + rand(1, 999) + "K</span></div>" +
+      '<div class="rail-btn" aria-hidden="true"><span class="ic">' + icon("forward", { sw: 2.4 }) + "</span><span>Share</span></div>" +
+      '<button class="disc" type="button" aria-label="Sound" style="--disc:' + discColor + '">' + icon("volume-x", { sw: 2.4 }) + "</button>" +
       "</div>"
     );
   }
 
-  function captionHtml(handle, text) {
+  function captionHtml(handle, text, song) {
     return (
       '<div class="caption">' +
       '<div class="handle">@' + handle + "</div>" +
       "<p>" + text + "</p>" +
-      '<div class="sound">' + icon("music") + "<span>original sound · " + handle + "</span></div>" +
+      '<div class="sound">' + icon("music") + "<span>" + music.label(song) + "</span></div>" +
       "</div>"
     );
   }
@@ -194,12 +221,12 @@
       '<div><span class="tt-text">you get 10 seconds.</span></div>' +
       '<div><span class="tt-text">scroll as far as you can.</span></div>' +
       "</div>" +
-      captionHtml("scrollitis", "how far can you get? <b>#fyp #scrollitis</b>") +
+      captionHtml("scrollitis", "how far can you get? <b>#fyp #scrollitis</b>", INTRO_SONG) +
       SCRUB +
       "</div>" +
-      railHtml(icon("chevrons-down", { sw: 2.6 }), "#000")
+      railHtml(icon("chevrons-down", { sw: 2.6 }), "#000", INTRO_SONG.avatar)
     );
-    reels.push({ type: "intro", rank: 0, closed: false, el });
+    reels.push({ type: "intro", rank: 0, closed: false, el, song: INTRO_SONG });
   }
 
   function createReel(type) {
@@ -209,44 +236,40 @@
     if (type === "reel") {
       rank++;
       const user = pick(USERS);
+      const song = pickSong();
+      const color = pick(AVATAR_COLORS);
       el = addSlot(
         "content",
         '<div class="card" style="background:' + pick(GRADIENTS) + '">' +
-        captionHtml(user, pick(CAPTIONS) + " <b>" + pick(TAGS) + "</b>") +
+        captionHtml(user, pick(CAPTIONS) + " <b>" + pick(TAGS) + "</b>", song) +
         SCRUB +
         "</div>" +
-        railHtml(user[0].toUpperCase(), pick(AVATAR_COLORS))
+        railHtml(user[0].toUpperCase(), color, color)
       );
-      reel = { type, rank, closed: false, el };
+      reel = { type, rank, closed: false, el, song };
     } else {
       const ad = pick(ADS);
       const side = Math.random() < 0.5 ? "tl" : "tr";
       el = addSlot(
         // Not "ad": content blockers (EasyList) hide .is-ad, .ad-cta etc.
         "pitch",
-        '<div class="card">' +
-        '<div class="pitch-media" style="background:' + pick(AD_GRADIENTS) + '">' +
-        '<div class="pitch-hero">' +
-        '<span class="pitch-hero-icon">' + icon(ad.icon) + "</span>" +
-        '<span class="pitch-hero-brand">' + ad.brand + "</span>" +
-        "</div>" +
-        "</div>" +
+        // Laid out like a TikTok promoted post: a normal caption with a red CTA bar under it
+        '<div class="card" style="background:' + pick(AD_GRADIENTS) + '">' +
+        '<div class="pitch-hero">' + icon(ad.icon, { sw: 1.6 }) + "<span>" + ad.brand + "</span></div>" +
         '<button class="pitch-x ' + side + '" type="button" aria-label="Close ad">' + icon("x", { sw: 2.6 }) + "</button>" +
         '<span class="pitch-plus ' + side + '">+1s</span>' +
         '<div class="pitch-hint">Ad · tap ✕ to keep scrolling</div>' +
-        '<div class="pitch-footer">' +
-        '<div class="pitch-brand-row">' +
-        '<span class="pitch-avatar">' + icon(ad.icon) + "</span>" +
-        '<span class="pitch-name">' + ad.brand + "<small>Sponsored</small></span>" +
-        "</div>" +
-        '<p class="pitch-title">' + ad.title + "</p>" +
+        '<div class="caption">' +
+        '<div class="handle">' + ad.brand + "</div>" +
+        "<p>" + ad.title + ' <span class="pitch-label">Sponsored</span></p>' +
+        '<div class="sound">' + icon("music") + "<span>" + music.label(JINGLE) + "</span></div>" +
         '<button class="pitch-cta" type="button" tabindex="-1">' + ad.cta + "</button>" +
         "</div>" +
         SCRUB +
         "</div>" +
-        railHtml(icon(ad.icon), "#1c1c1f")
+        railHtml(icon(ad.icon), "#1c1c1f", "#c8a27a")
       );
-      reel = { type, rank: -1, closed: false, el };
+      reel = { type, rank: -1, closed: false, el, song: JINGLE };
       el.querySelector(".pitch-x").addEventListener("click", (e) => {
         e.stopPropagation();
         closeAd(reel);
@@ -261,6 +284,7 @@
     track.innerHTML = "";
     reels = [];
     rank = 0;
+    lastSong = INTRO_SONG;
     sinceAd = 0;
     nextAdAfter = randomGap();
     idx = -1;
@@ -292,6 +316,8 @@
     if (phase === "ready" && top > slotH * 0.12) startRun();
 
     const cur = Math.max(0, Math.min(reels.length - 1, Math.round(top / slotH)));
+    // Music dips while the feed is between reels; the next track starts once its reel is over halfway in
+    if (playingReel) music.duck(Math.min(1, Math.abs(top / slotH - cur) * 2));
     if (cur !== idx) {
       if (reels[idx]) reels[idx].el.classList.remove("active");
       idx = cur;
@@ -305,10 +331,12 @@
         }
       }
       updateHud();
+      syncMusic();
     }
   }
 
   feed.addEventListener("scroll", onScroll, { passive: true });
+  feed.addEventListener("scrollend", () => music.duck(0));
 
   function onAd() {
     const r = reels[idx];
@@ -352,6 +380,48 @@
   }
 
   window.addEventListener("resize", measure);
+
+  // ---------- music ----------
+
+  function syncMusic() {
+    const reel = reels[idx];
+    const want = soundOn && music.running() && phase !== "over" && !document.hidden && reel;
+    if (want && playingReel !== reel) {
+      music.play(reel.song);
+      music.duck(0);
+      playingReel = reel;
+    } else if (!want && playingReel) {
+      music.stop();
+      playingReel = null;
+    }
+    app.classList.toggle("muted", !soundOn);
+  }
+
+  // Audio can only start from a tap, click or key press. Scrolling alone doesn't count.
+  function unlockAudio() {
+    if (!soundOn || music.running()) return;
+    music.unlock();
+    // resume() is async
+    setTimeout(syncMusic, 60);
+  }
+
+  ["pointerdown", "touchend", "click", "keydown"].forEach((type) => {
+    window.addEventListener(type, unlockAudio, { capture: true, passive: true });
+  });
+
+  track.addEventListener("click", (e) => {
+    if (!e.target.closest(".disc")) return;
+    soundOn = !soundOn;
+    try {
+      localStorage.setItem(SOUND_KEY, soundOn ? "on" : "off");
+    } catch (err) {}
+    if (soundOn) music.unlock();
+    setTimeout(syncMusic, 60);
+    syncMusic();
+  });
+
+  // Background tabs throttle timers, which garbles the loop
+  document.addEventListener("visibilitychange", syncMusic);
 
   // ---------- game ----------
 
@@ -424,6 +494,7 @@
     stats.last = score;
     if (isBest) stats.best = score;
     saveStats();
+    syncMusic();
 
     const totalTime = START_TIME + adsClosed;
     finalScore.textContent = score;
