@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Start Screen Story</title>
+  <title>Scrollitis Story</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -598,7 +598,278 @@
 
     .rail-item.stat-item svg { width: 28px; height: 28px; }
 
+    /* ---------- sections ---------- */
+    .sec { margin-top: 56px; }
+
+    .sec-head h2 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+    }
+
+    .sec-head p {
+      margin: 8px 0 0;
+      max-width: 680px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    /* ---------- feed sounds ---------- */
+    .snd-wrap {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr);
+      gap: 40px;
+      align-items: start;
+    }
+
+    .snd-phone-col {
+      position: sticky;
+      top: 24px;
+    }
+
+    .sf-feed {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+      overscroll-behavior: contain;
+      scrollbar-width: none;
+      outline: none;
+    }
+
+    .sf-feed::-webkit-scrollbar { display: none; }
+
+    .sf-reel {
+      height: 100%;
+      display: flex;
+      padding-bottom: 8px;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+
+    .sf-reel .b-center { inset: 0 0 150px; }
+
+    .sf-chip {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.38);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .sf-marq {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .sf-marq span {
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .snd.is-on .sf-reel.is-live .sf-marq span { animation: marq 10s linear infinite; }
+
+    .sf-reel .disc { animation-play-state: paused; }
+    .snd.is-on .sf-reel.is-live .disc { animation-play-state: running; }
+
+    .sf-pitch-hero {
+      position: absolute;
+      inset: 0 0 150px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding-right: 50px;
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .sf-pitch-hero svg { width: 56px; height: 56px; opacity: 0.9; }
+
+    .sf-tagline {
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0.7;
+    }
+
+    .sf-pitch-cta {
+      margin-top: 8px;
+      padding: 8px 0;
+      border-radius: 6px;
+      background: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .sf-gate {
+      position: absolute;
+      left: 50%;
+      top: 28%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.72);
+      color: #fff;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+    }
+
+    .sf-gate svg { width: 18px; height: 18px; }
+    .snd.is-on .sf-gate { display: none; }
+
+    .snd-bar {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .snd-toggle {
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0a0a0a;
+      background: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+    }
+
+    .snd-toggle svg { width: 15px; height: 15px; }
+
+    .snd-vol {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .snd-vol input { flex: 1; min-width: 0; accent-color: var(--accent); }
+
+    .snd-hint {
+      margin: 10px 0 0;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .snd-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .snd-row {
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr) 18px;
+      gap: 14px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #111;
+      cursor: pointer;
+    }
+
+    .snd-row:hover { border-color: #2c2c2c; }
+    .snd-row.is-live { border-color: rgba(254, 44, 85, 0.6); background: #170d11; }
+
+    .snd-play {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: #fff;
+      color: #0a0a0a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .snd-play svg { width: 16px; height: 16px; }
+
+    .snd-title {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 2px 10px;
+    }
+
+    .snd-num { font-size: 13px; font-weight: 800; color: var(--accent); }
+    .snd-name { font-size: 15px; font-weight: 700; }
+    .snd-genre { font-size: 12.5px; color: var(--muted); }
+
+    .snd-row p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+
+    .snd-eq {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 16px;
+      margin-top: 12px;
+      opacity: 0;
+    }
+
+    .snd.is-on .snd-row.is-live .snd-eq { opacity: 1; }
+
+    .snd-eq i {
+      display: block;
+      width: 4px;
+      height: 100%;
+      border-radius: 1px;
+      background: var(--accent);
+      transform-origin: bottom;
+      animation: eq 0.7s ease-in-out infinite alternate;
+    }
+
+    .snd-eq i:nth-child(2) { animation-delay: -0.3s; }
+    .snd-eq i:nth-child(3) { animation-delay: -0.55s; }
+
+    @media (max-width: 800px) {
+      .snd-wrap { grid-template-columns: minmax(0, 1fr); }
+      .snd-phone-col { position: static; width: 100%; max-width: 340px; margin: 0 auto; }
+    }
+
     /* ---------- anims ---------- */
+    @keyframes marq { to { transform: translateX(-50%); } }
+    @keyframes eq {
+      from { transform: scaleY(0.25); }
+      to { transform: scaleY(1); }
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes prog { to { width: 100%; } }
     @keyframes bob {
@@ -614,9 +885,38 @@
 <body>
   <div class="page">
     <header>
-      <h1>Start screen: variants</h1>
-      <p>Four takes on the start screen as a TikTok-style card: black screen, one post, action rail on the right, stats at the bottom so the top stays clean. The toggles change every phone at once, so you can compare names, marks and colors across layouts.</p>
+      <h1>Scrollitis story</h1>
+      <p>Design explorations for the game. Nothing here ships until it's picked.</p>
     </header>
+
+    <!-- Feed sounds -->
+    <section class="sec snd" id="sounds">
+      <div class="sec-head">
+        <h2>Feed sounds</h2>
+        <p>Like TikTok, every reel has its own sound. Scroll the phone and the music cuts straight to the next track. All ten are generated live in the browser with Web Audio, with no audio files. They're written from scratch in the style of each trend, not copied from real songs (the Bach is public domain). Tell me by number which ones to keep, change or drop.</p>
+      </div>
+      <div class="snd-wrap">
+        <div class="snd-phone-col">
+          <div class="phone sf-phone" id="sf-phone">
+            <div class="status"><span>9:41</span><span class="status-r"><i></i></span></div>
+            <div class="sf-feed" id="sf-feed" tabindex="0" aria-label="Sound preview feed"></div>
+            <button class="sf-gate" id="sf-gate" type="button"></button>
+          </div>
+          <div class="snd-bar">
+            <button class="snd-toggle" id="snd-toggle" type="button"></button>
+            <label class="snd-vol"><span>Volume</span><input id="snd-vol" type="range" min="0" max="1" step="0.01" value="0.7" /></label>
+          </div>
+          <p class="snd-hint">Scroll the phone, or click a track on the right.</p>
+        </div>
+        <ol class="snd-list" id="snd-list"></ol>
+      </div>
+    </section>
+
+    <section class="sec">
+    <div class="sec-head">
+      <h2>Start screen: variants</h2>
+      <p>Four takes on the start screen as a TikTok-style card: black screen, one post, action rail on the right, stats at the bottom so the top stays clean. The toggles change every phone at once, so you can compare names, marks and colors across layouts.</p>
+    </div>
 
     <div class="controls">
       <div class="ctrl">
@@ -756,8 +1056,10 @@
       </section>
 
     </div>
+    </section>
   </div>
 
+  <script src="sounds.js"></script>
   <script>
     (() => {
       // Icons: Lucide (ISC) — https://lucide.dev
