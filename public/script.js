@@ -425,11 +425,21 @@
     if (isBest) stats.best = score;
     saveStats();
 
+    const totalTime = START_TIME + adsClosed;
     finalScore.textContent = score;
     finalAds.textContent = adsClosed;
-    finalTime.textContent = START_TIME + adsClosed + "s";
+    finalTime.textContent = totalTime + "s";
     newBest.classList.toggle("hidden", !isBest || score === 0);
     gameOver.classList.remove("hidden");
+
+    trackEvent("score/" + score);
+    trackEvent("time/" + totalTime + "s");
+  }
+
+  // GoatCounter is only loaded in production (see index.html), and may be blocked.
+  function trackEvent(path) {
+    if (!window.goatcounter || !window.goatcounter.count) return;
+    window.goatcounter.count({ path, title: path, event: true });
   }
 
   function reset() {
