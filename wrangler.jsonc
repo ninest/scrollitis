@@ -1,0 +1,6 @@
+{
+  "name": "scrollitis",
+  "compatibility_date": "2026-09-24",
+  "assets": { "directory": "./public" },
+  "routes": [{ "pattern": "scrollitis.misc.page", "custom_domain": true }]
+}
