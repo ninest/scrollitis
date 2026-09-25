@@ -6,9 +6,9 @@
     "heart": '<path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />',
     "message-circle": '<path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />',
     "bookmark": '<path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z" />',
-    "share-2": '<circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" x2="15.42" y1="13.51" y2="17.49" /><line x1="15.41" x2="8.59" y1="6.51" y2="10.49" />',
+    "forward": '<polyline points="15 17 20 12 15 7" /><path d="M4 18v-2a4 4 0 0 1 4-4h12" />',
+    "chevrons-down": '<path d="m7 6 5 5 5-5" /><path d="m7 13 5 5 5-5" />',
     "x": '<path d="M18 6 6 18" /><path d="m6 6 12 12" />',
-    "chevron-down": '<path d="m6 9 6 6 6-6" />',
     "music": '<path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />',
     "coffee": '<path d="M10 2v2" /><path d="M14 2v2" /><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1" /><path d="M6 2v2" />',
     "shirt": '<path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />',
@@ -19,27 +19,41 @@
     "shopping-bag": '<path d="M16 10a4 4 0 0 1-8 0" /><path d="M3.103 6.034h17.794" /><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z" />'
   };
 
-  function icon(name) {
-    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[name] + "</svg>";
+  function icon(name, opts) {
+    const o = opts || {};
+    const paint = o.fill ? 'fill="currentColor" stroke="none"' : 'fill="none" stroke="currentColor"';
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" ' + paint + ' stroke-width="' + (o.sw || 2) + '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[name] + "</svg>";
   }
 
   const START_TIME = 5;
+  const STORE_KEY = "scrollitis:stats";
 
-  const reelsEl = document.getElementById("reels");
-  const startScreen = document.getElementById("start-screen");
-  const playScreen = document.getElementById("play-screen");
+  const app = document.getElementById("app");
+  const feed = document.getElementById("feed");
+  const track = document.getElementById("track");
   const gameOver = document.getElementById("game-over");
-  const startBtn = document.getElementById("start-btn");
+  const playBtn = document.getElementById("play-btn");
   const againBtn = document.getElementById("again-btn");
 
+  const bestEl = document.getElementById("best");
+  const lastEl = document.getElementById("last");
   const scoreEl = document.getElementById("score");
   const timerEl = document.getElementById("timer");
   const adsEl = document.getElementById("ads");
-  const timeFill = document.getElementById("timebar-fill");
 
   const finalScore = document.getElementById("final-score");
   const finalAds = document.getElementById("final-ads");
   const finalTime = document.getElementById("final-time");
+  const newBest = document.getElementById("new-best");
+
+  const USERS = [
+    "maya.eats", "dev.after.dark", "tiny.kitchen", "gymrat.jon", "sad.lofi.cat",
+    "plantdad.leo", "nightowl.nina", "runclub.sam", "deskchef", "skate.theo",
+    "mora.makes", "8bit.ben", "cozy.corner", "priya.paints", "the.fit.check",
+    "zoe.travels", "chaos.kitchen", "bookish.bea", "lil.drummer", "moodboard.mo"
+  ];
+
+  const AVATAR_COLORS = ["#ff9f43", "#5f27cd", "#10ac84", "#ee5253", "#2e86de", "#f368e0", "#01a3a4", "#222f3e"];
 
   const CAPTIONS = [
     "POV: you should be sleeping",
@@ -55,6 +69,8 @@
     "Tag a friend who needs this",
     "Me, at 2am, purely by accident"
   ];
+
+  const TAGS = ["#fyp", "#foryou", "#viral", "#relatable", "#trending", "#2am"];
 
   const GRADIENTS = [
     "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
@@ -88,21 +104,36 @@
     { icon: "shopping-bag", brand: "Cartful", title: "Everything, in 20 minutes", cta: "Order now" }
   ];
 
+  // phase: "ready" (intro card showing) → "playing" → "over"
+  let phase = "ready";
   let reels = [];
+  let idx = -1;
   let score = 0;
   let adsClosed = 0;
-  let timeLeft = 0;
-  let playing = false;
-  let locked = false;
-  let frozen = false;
-  let activeAd = null;
+  let timeLeft = START_TIME;
   let sinceAd = 0;
   let nextAdAfter = randomGap();
-  let normalRank = 0;
+  let rank = 0;
   let lastTs = 0;
+  let stats = loadStats();
 
+  function loadStats() {
+    try {
+      const s = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
+      if (s && typeof s.best === "number") return s;
+    } catch (e) {}
+    return { best: 0, last: null };
+  }
+
+  function saveStats() {
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify(stats));
+    } catch (e) {}
+  }
+
+  // 4–6 reels between ads, about one every 5
   function randomGap() {
-    return 3 + Math.floor(Math.random() * 3);
+    return 4 + Math.floor(Math.random() * 3);
   }
 
   function rand(a, b) {
@@ -123,79 +154,211 @@
     return "ad";
   }
 
-  function createReel(type, rank) {
+  function railHtml(avatar, avatarBg) {
+    return (
+      '<div class="rail" aria-hidden="true">' +
+      '<div class="avatar" style="background:' + avatarBg + '">' + avatar + "</div>" +
+      '<div class="rail-btn"><span class="ic">' + icon("heart", { fill: true }) + "</span><span>" + rand(1, 999) + "K</span></div>" +
+      '<div class="rail-btn"><span class="ic">' + icon("message-circle", { fill: true }) + "</span><span>" + rand(12, 9999).toLocaleString() + "</span></div>" +
+      '<div class="rail-btn"><span class="ic">' + icon("bookmark", { fill: true }) + "</span><span>" + rand(1, 999) + "K</span></div>" +
+      '<div class="rail-btn"><span class="ic">' + icon("forward", { sw: 2.4 }) + "</span><span>Share</span></div>" +
+      "</div>"
+    );
+  }
+
+  function captionHtml(handle, text) {
+    return (
+      '<div class="caption">' +
+      '<div class="handle">@' + handle + "</div>" +
+      "<p>" + text + "</p>" +
+      '<div class="sound">' + icon("music") + "<span>original sound · " + handle + "</span></div>" +
+      "</div>"
+    );
+  }
+
+  const SCRUB = '<div class="scrub"><i></i></div>';
+
+  function addSlot(type, inner) {
     const el = document.createElement("section");
-    el.className = "reel " + (type === "ad" ? "is-ad" : "is-content");
+    el.className = "slot is-" + type;
+    el.innerHTML = inner;
+    track.appendChild(el);
+    return el;
+  }
+
+  function createIntro() {
+    const el = addSlot(
+      "intro",
+      '<div class="card">' +
+      '<div class="tt-lines">' +
+      '<div><span class="tt-text">you get 5 seconds.</span></div>' +
+      '<div><span class="tt-text">scroll as far as you can.</span></div>' +
+      "</div>" +
+      captionHtml("scrollitis", "how far can you get? <b>#fyp #scrollitis</b>") +
+      SCRUB +
+      "</div>" +
+      railHtml(icon("chevrons-down", { sw: 2.6 }), "#000")
+    );
+    reels.push({ type: "intro", rank: 0, closed: false, el });
+  }
+
+  function createReel(type) {
+    let el;
+    let reel;
 
     if (type === "reel") {
-      el.style.background = pick(GRADIENTS);
-      const cap = pick(CAPTIONS);
-      const pad = rank < 10 ? "0" : "";
-      el.innerHTML =
-        '<span class="chip">Reel ' + (rank + 1) + "</span>" +
-        '<div class="caption-area">' +
-        '<span class="handle">@doom.reel.' + pad + rank + "</span>" +
-        '<p class="caption">' + cap + "</p>" +
+      rank++;
+      const user = pick(USERS);
+      el = addSlot(
+        "content",
+        '<div class="card" style="background:' + pick(GRADIENTS) + '">' +
+        captionHtml(user, pick(CAPTIONS) + " <b>" + pick(TAGS) + "</b>") +
+        SCRUB +
         "</div>" +
-        '<div class="rail">' +
-        '<button class="rail-btn" aria-hidden="true">' + icon("heart") + "<span>" + rand(1, 999) + "K</span></button>" +
-        '<button class="rail-btn" aria-hidden="true">' + icon("message-circle") + "<span>" + rand(12, 999) + "</span></button>" +
-        '<button class="rail-btn" aria-hidden="true">' + icon("bookmark") + "<span>" + rand(1, 999) + "K</span></button>" +
-        '<button class="rail-btn" aria-hidden="true">' + icon("share-2") + "<span>Share</span></button>" +
-        "</div>" +
-        '<div class="sound-disc">' + icon("music") + "</div>" +
-        (rank === 0 ? '<div class="swipe-hint">' + icon("chevron-down") + "<span>Scroll</span></div>" : "");
+        railHtml(user[0].toUpperCase(), pick(AVATAR_COLORS))
+      );
+      reel = { type, rank, closed: false, el };
     } else {
       const ad = pick(ADS);
       const side = Math.random() < 0.5 ? "tl" : "tr";
-      const other = side === "tl" ? "tr" : "tl";
-      el.innerHTML =
+      el = addSlot(
+        "ad",
+        '<div class="card">' +
         '<div class="ad-media" style="background:' + pick(AD_GRADIENTS) + '">' +
         '<div class="ad-hero">' +
         '<span class="ad-hero-icon">' + icon(ad.icon) + "</span>" +
         '<span class="ad-hero-brand">' + ad.brand + "</span>" +
         "</div>" +
         "</div>" +
-        '<button class="ad-x ' + side + '" aria-label="Close ad">' + icon("x") + "</button>" +
-        '<span class="ad-tag ' + other + '">Sponsored</span>' +
+        '<button class="ad-x ' + side + '" type="button" aria-label="Close ad">' + icon("x", { sw: 2.6 }) + "</button>" +
+        '<span class="ad-plus ' + side + '">+1s</span>' +
+        '<div class="ad-hint">Ad · tap ✕ to keep scrolling</div>' +
         '<div class="ad-footer">' +
         '<div class="ad-brand-row">' +
         '<span class="ad-avatar">' + icon(ad.icon) + "</span>" +
-        '<span class="ad-name">' + ad.brand + "</span>" +
+        '<span class="ad-name">' + ad.brand + "<small>Sponsored</small></span>" +
         "</div>" +
         '<p class="ad-title">' + ad.title + "</p>" +
-        '<button class="ad-cta" tabindex="-1">' + ad.cta + "</button>" +
+        '<button class="ad-cta" type="button" tabindex="-1">' + ad.cta + "</button>" +
         "</div>" +
-        '<span class="ad-plus ' + side + '">+1s</span>' +
-        '<div class="ad-hint">Tap X to keep scrolling</div>';
-
+        SCRUB +
+        "</div>" +
+        railHtml(icon(ad.icon), "#1c1c1f")
+      );
+      reel = { type, rank: -1, closed: false, el };
       el.querySelector(".ad-x").addEventListener("click", (e) => {
         e.stopPropagation();
         closeAd(reel);
       });
     }
 
-    reelsEl.appendChild(el);
-    const reel = { type, rank, closed: false, el };
     reels.push(reel);
     return reel;
   }
 
-  function makeReel() {
-    const t = nextType();
-    return createReel(t, t === "reel" ? normalRank++ : -1);
+  function buildFeed() {
+    track.innerHTML = "";
+    reels = [];
+    rank = 0;
+    sinceAd = 0;
+    nextAdAfter = randomGap();
+    idx = -1;
+    createIntro();
+    fill();
+    feed.classList.remove("locked");
+    feed.scrollTop = 0;
+    onScroll();
   }
 
-  function seedReels(count) {
-    for (let i = 0; i < count; i++) makeReel();
+  // ---------- scrolling ----------
+  // Plain native scrolling with snap. The feed never extends past an ad that
+  // hasn't been closed, so the ad is simply the end of the feed until the
+  // player taps ✕. (No overflow toggling: iOS freezes if it changes mid-fling.)
+
+  let slotH = 0;
+
+  function fill() {
+    while (reels.length - Math.max(idx, 0) < 8) {
+      const last = reels[reels.length - 1];
+      if (last.type === "ad" && !last.closed) return;
+      createReel(nextType());
+    }
   }
+
+  function onScroll() {
+    if (!reels.length || !slotH) return;
+    const top = feed.scrollTop;
+    if (phase === "ready" && top > slotH * 0.12) startRun();
+
+    const cur = Math.max(0, Math.min(reels.length - 1, Math.round(top / slotH)));
+    if (cur !== idx) {
+      if (reels[idx]) reels[idx].el.classList.remove("active");
+      idx = cur;
+      reels[idx].el.classList.add("active");
+      fill();
+      // Count every reel passed, even ones skipped over in a fast flick
+      for (let i = idx; i >= 0; i--) {
+        if (reels[i].type === "reel") {
+          score = Math.max(score, reels[i].rank);
+          break;
+        }
+      }
+      updateHud();
+    }
+  }
+
+  feed.addEventListener("scroll", onScroll, { passive: true });
+
+  function onAd() {
+    const r = reels[idx];
+    return phase === "playing" && r && r.type === "ad" && !r.closed;
+  }
+
+  // Trying to scroll while stuck on an ad flashes its ✕ and hint.
+  function nudgeAd() {
+    const r = reels[idx];
+    if (!onAd() || r.el.classList.contains("blocked")) return;
+    r.el.classList.add("blocked");
+    setTimeout(() => r.el.classList.remove("blocked"), 450);
+  }
+
+  feed.addEventListener("wheel", (e) => e.deltaY > 0 && nudgeAd(), { passive: true });
+  feed.addEventListener("touchmove", nudgeAd, { passive: true });
+
+  function goTo(i) {
+    feed.scrollTo({ top: i * slotH, behavior: "smooth" });
+  }
+
+  window.addEventListener("keydown", (e) => {
+    if (phase === "over") return;
+    const next = ["ArrowDown", "PageDown", " ", "Spacebar", "j"];
+    const prev = ["ArrowUp", "PageUp", "k"];
+    if (next.includes(e.key)) {
+      if (e.target.tagName === "BUTTON" && e.key === " ") return;
+      e.preventDefault();
+      if (onAd()) nudgeAd();
+      else if (!e.repeat) goTo(idx + 1);
+    } else if (prev.includes(e.key)) {
+      e.preventDefault();
+      if (!e.repeat) goTo(idx - 1);
+    }
+  });
+
+  function measure() {
+    slotH = feed.clientHeight;
+    document.documentElement.style.setProperty("--h", slotH + "px");
+    feed.scrollTop = Math.max(idx, 0) * slotH;
+  }
+
+  window.addEventListener("resize", measure);
+
+  // ---------- game ----------
 
   function updateHud() {
     scoreEl.textContent = score;
     adsEl.textContent = adsClosed;
     const t = Math.max(0, timeLeft);
     timerEl.textContent = t.toFixed(1);
-    timeFill.style.width = (Math.max(0, Math.min(1, t / START_TIME)) * 100) + "%";
 
     let col = "#ffffff";
     if (t > START_TIME) col = "#27e07f";
@@ -203,40 +366,32 @@
     else if (t <= 2) col = "#ffb020";
     timerEl.style.color = col;
 
-    if (t <= 1) timeFill.style.background = "#ff4d4d";
-    else if (t <= 2) timeFill.style.background = "#ffb020";
-    else if (t > START_TIME) timeFill.style.background = "#27e07f";
-    else timeFill.style.background = "#fe2c55";
+    const fill = reels[idx] && reels[idx].el.querySelector(".scrub i");
+    if (fill) {
+      fill.style.width = Math.max(0, Math.min(1, t / START_TIME)) * 100 + "%";
+      fill.style.background = col;
+    }
 
-    playScreen.classList.toggle("critical", playing && t <= 1);
+    app.classList.toggle("critical", phase === "playing" && t <= 1);
   }
 
-  function lockToAd(reel) {
-    locked = true;
-    activeAd = reel;
-    reelsEl.classList.add("locked");
-    reel.el.classList.add("active");
-    reelsEl.scrollTop = reel.el.offsetTop;
-  }
-
-  function unlockIfNeeded() {
-    if (!locked) return;
-    locked = false;
-    activeAd = null;
-    reelsEl.classList.remove("locked");
-    reels.forEach((r) => r.el.classList.remove("active"));
+  function updateReadyDock() {
+    bestEl.textContent = stats.best;
+    lastEl.textContent = stats.last === null ? "–" : stats.last;
   }
 
   function closeAd(reel) {
-    if (!reel || reel.closed) return;
+    if (phase !== "playing" || reel.closed) return;
     reel.closed = true;
     reel.el.classList.add("closed");
-    reel.el.classList.remove("active");
     adsClosed++;
     timeLeft += 1;
     spawnPlusOne();
-    unlockIfNeeded();
     updateHud();
+    fill();
+    setTimeout(() => {
+      if (phase === "playing" && reels[idx] === reel) goTo(idx + 1);
+    }, 160);
   }
 
   function spawnPlusOne() {
@@ -246,45 +401,43 @@
     fly.textContent = "+1s";
     fly.style.left = r.left + r.width / 2 + "px";
     fly.style.top = r.top - 6 + "px";
-    playScreen.appendChild(fly);
+    app.appendChild(fly);
     fly.addEventListener("animationend", () => fly.remove());
   }
 
-  function onScroll() {
-    if (!playing || reels.length === 0) return;
-
-    const st = reelsEl.scrollTop;
-    let idx = 0;
-    let best = Infinity;
-    for (let i = 0; i < reels.length; i++) {
-      const d = Math.abs(st - reels[i].el.offsetTop);
-      if (d < best) {
-        best = d;
-        idx = i;
-      }
-    }
-
-    let adIdx = -1;
-    for (let i = 0; i <= idx && i < reels.length; i++) {
-      if (reels[i].type === "ad" && !reels[i].closed) {
-        adIdx = i;
-        break;
-      }
-    }
-
-    if (adIdx !== -1) {
-      if (!locked || activeAd !== reels[adIdx]) lockToAd(reels[adIdx]);
-    } else {
-      unlockIfNeeded();
-      const reel = reels[idx];
-      if (reel.type === "reel" && reel.rank > score) score = reel.rank;
-    }
-
-    if (reelsEl.scrollTop + reelsEl.clientHeight > reelsEl.scrollHeight - reelsEl.clientHeight * 1.5) {
-      for (let i = 0; i < 6; i++) makeReel();
-    }
-
+  function startRun() {
+    phase = "playing";
+    score = 0;
+    adsClosed = 0;
+    timeLeft = START_TIME;
+    lastTs = 0;
+    app.classList.add("playing");
     updateHud();
+  }
+
+  function endRun() {
+    phase = "over";
+    feed.classList.add("locked");
+    app.classList.remove("critical");
+    const isBest = score > stats.best;
+    stats.last = score;
+    if (isBest) stats.best = score;
+    saveStats();
+
+    finalScore.textContent = score;
+    finalAds.textContent = adsClosed;
+    finalTime.textContent = START_TIME + adsClosed + "s";
+    newBest.classList.toggle("hidden", !isBest || score === 0);
+    gameOver.classList.remove("hidden");
+  }
+
+  function reset() {
+    phase = "ready";
+    timeLeft = START_TIME;
+    gameOver.classList.add("hidden");
+    app.classList.remove("playing", "critical");
+    buildFeed();
+    updateReadyDock();
   }
 
   function loop(ts) {
@@ -292,12 +445,12 @@
     const dt = Math.min(0.1, (ts - lastTs) / 1000);
     lastTs = ts;
 
-    if (playing) {
+    if (phase === "playing") {
       timeLeft -= dt;
       if (timeLeft <= 0) {
         timeLeft = 0;
         updateHud();
-        endGame();
+        endRun();
       } else {
         updateHud();
       }
@@ -306,83 +459,10 @@
     requestAnimationFrame(loop);
   }
 
-  function endGame() {
-    playing = false;
-    frozen = true;
-    reelsEl.classList.add("locked");
-    finalScore.textContent = score;
-    finalAds.textContent = adsClosed;
-    finalTime.textContent = (START_TIME + adsClosed) + "s";
-    gameOver.classList.remove("hidden");
-  }
+  playBtn.addEventListener("click", () => goTo(1));
+  againBtn.addEventListener("click", reset);
 
-  function startGame() {
-    reels = [];
-    normalRank = 0;
-    sinceAd = 0;
-    nextAdAfter = randomGap();
-    score = 0;
-    adsClosed = 0;
-    timeLeft = START_TIME;
-    playing = true;
-    frozen = false;
-    locked = false;
-    activeAd = null;
-    lastTs = 0;
-
-    reelsEl.innerHTML = "";
-    reelsEl.classList.remove("locked", "frozen");
-    seedReels(8);
-    reelsEl.scrollTop = 0;
-
-    startScreen.classList.add("hidden");
-    playScreen.classList.remove("hidden");
-    gameOver.classList.add("hidden");
-    updateHud();
-  }
-
-  reelsEl.addEventListener(
-    "wheel",
-    (e) => {
-      if (locked || frozen) e.preventDefault();
-    },
-    { passive: false }
-  );
-
-  reelsEl.addEventListener(
-    "touchmove",
-    (e) => {
-      if (locked || frozen) e.preventDefault();
-    },
-    { passive: false }
-  );
-
-  window.addEventListener("keydown", (e) => {
-    if (!playing) return;
-    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " ", "Spacebar", "PageUp", "PageDown", "Home", "End"].includes(e.key)) {
-      e.preventDefault();
-    }
-  });
-
-  window.addEventListener("resize", () => {
-    if (!playing) return;
-    const st = reelsEl.scrollTop;
-    let idx = 0;
-    let best = Infinity;
-    for (let i = 0; i < reels.length; i++) {
-      const d = Math.abs(st - reels[i].el.offsetTop);
-      if (d < best) {
-        best = d;
-        idx = i;
-      }
-    }
-    reelsEl.scrollTop = reels[idx].el.offsetTop;
-  });
-
-  reelsEl.addEventListener("scroll", onScroll, { passive: true });
-
-  startBtn.addEventListener("click", startGame);
-  againBtn.addEventListener("click", startGame);
-
+  measure();
+  reset();
   requestAnimationFrame(loop);
 })();

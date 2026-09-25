@@ -419,6 +419,7 @@
       align-items: center;
       justify-content: center;
       gap: 14px;
+      padding: 0 60px 0 16px;
     }
 
     .a-word {
@@ -453,14 +454,14 @@
       justify-content: center;
       gap: 5px;
       text-align: center;
-      padding: 0 20px;
+      padding: 0 62px 0 14px;
     }
 
     .tt-text {
       display: inline;
       background: #fff;
       color: #111;
-      font-size: 19px;
+      font-size: 17px;
       font-weight: 800;
       letter-spacing: -0.2px;
       line-height: 1.55;
@@ -668,7 +669,7 @@
 
       <!-- B -->
       <section class="variant">
-        <div class="v-head"><span class="v-letter">B</span><span class="v-name">Text post</span></div>
+        <div class="v-head"><span class="v-letter">B</span><span class="v-name">Text post</span><span class="v-letter" style="color:var(--cyan)">shipped</span></div>
         <div class="phone">
           <div class="status"><span>9:41</span><span class="status-r"><i></i></span></div>
           <div class="card">
@@ -782,6 +783,7 @@
       };
 
       const NAMES = [
+        { name: "Scrollitis", handle: "scrollitis", br: "Scroll<br>itis" },
         { name: "Doomscroll", handle: "doomscroll", br: "Doom<br>scroll" },
         { name: "Just One More", handle: "justonemore", br: "Just one<br>more" },
         { name: "Skip Ad", handle: "skipad", br: "Skip<br>ad" },
@@ -803,9 +805,9 @@
         { id: "ink", label: "Ink", card: "#1c1c1f", peek: "#fe2c55" }
       ];
 
-      const state = { name: 0, mark: 0, color: 0 };
+      const state = { name: 0, mark: 1, color: 0 };
       try {
-        Object.assign(state, JSON.parse(localStorage.getItem("story-state") || "{}"));
+        Object.assign(state, JSON.parse(localStorage.getItem("story-state-v2") || "{}"));
       } catch (e) {}
 
       function markHtml() {
@@ -857,7 +859,7 @@
           seg.querySelectorAll("button").forEach((b, i) => b.setAttribute("aria-pressed", String(i === state[key])));
         });
 
-        try { localStorage.setItem("story-state", JSON.stringify(state)); } catch (e) {}
+        try { localStorage.setItem("story-state-v2", JSON.stringify(state)); } catch (e) {}
       }
 
       function buildSeg(key, items, labelFn) {
