@@ -25,7 +25,7 @@
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" ' + paint + ' stroke-width="' + (o.sw || 2) + '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[name] + "</svg>";
   }
 
-  const START_TIME = 5;
+  const START_TIME = 10;
   const STORE_KEY = "scrollitis:stats";
 
   const app = document.getElementById("app");
@@ -191,7 +191,7 @@
       "intro",
       '<div class="card">' +
       '<div class="tt-lines">' +
-      '<div><span class="tt-text">you get 5 seconds.</span></div>' +
+      '<div><span class="tt-text">you get 10 seconds.</span></div>' +
       '<div><span class="tt-text">scroll as far as you can.</span></div>' +
       "</div>" +
       captionHtml("scrollitis", "how far can you get? <b>#fyp #scrollitis</b>") +
@@ -222,31 +222,32 @@
       const ad = pick(ADS);
       const side = Math.random() < 0.5 ? "tl" : "tr";
       el = addSlot(
-        "ad",
+        // Not "ad": content blockers (EasyList) hide .is-ad, .ad-cta etc.
+        "pitch",
         '<div class="card">' +
-        '<div class="ad-media" style="background:' + pick(AD_GRADIENTS) + '">' +
-        '<div class="ad-hero">' +
-        '<span class="ad-hero-icon">' + icon(ad.icon) + "</span>" +
-        '<span class="ad-hero-brand">' + ad.brand + "</span>" +
+        '<div class="pitch-media" style="background:' + pick(AD_GRADIENTS) + '">' +
+        '<div class="pitch-hero">' +
+        '<span class="pitch-hero-icon">' + icon(ad.icon) + "</span>" +
+        '<span class="pitch-hero-brand">' + ad.brand + "</span>" +
         "</div>" +
         "</div>" +
-        '<button class="ad-x ' + side + '" type="button" aria-label="Close ad">' + icon("x", { sw: 2.6 }) + "</button>" +
-        '<span class="ad-plus ' + side + '">+1s</span>' +
-        '<div class="ad-hint">Ad · tap ✕ to keep scrolling</div>' +
-        '<div class="ad-footer">' +
-        '<div class="ad-brand-row">' +
-        '<span class="ad-avatar">' + icon(ad.icon) + "</span>" +
-        '<span class="ad-name">' + ad.brand + "<small>Sponsored</small></span>" +
+        '<button class="pitch-x ' + side + '" type="button" aria-label="Close ad">' + icon("x", { sw: 2.6 }) + "</button>" +
+        '<span class="pitch-plus ' + side + '">+1s</span>' +
+        '<div class="pitch-hint">Ad · tap ✕ to keep scrolling</div>' +
+        '<div class="pitch-footer">' +
+        '<div class="pitch-brand-row">' +
+        '<span class="pitch-avatar">' + icon(ad.icon) + "</span>" +
+        '<span class="pitch-name">' + ad.brand + "<small>Sponsored</small></span>" +
         "</div>" +
-        '<p class="ad-title">' + ad.title + "</p>" +
-        '<button class="ad-cta" type="button" tabindex="-1">' + ad.cta + "</button>" +
+        '<p class="pitch-title">' + ad.title + "</p>" +
+        '<button class="pitch-cta" type="button" tabindex="-1">' + ad.cta + "</button>" +
         "</div>" +
         SCRUB +
         "</div>" +
         railHtml(icon(ad.icon), "#1c1c1f")
       );
       reel = { type, rank: -1, closed: false, el };
-      el.querySelector(".ad-x").addEventListener("click", (e) => {
+      el.querySelector(".pitch-x").addEventListener("click", (e) => {
         e.stopPropagation();
         closeAd(reel);
       });
