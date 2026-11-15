@@ -1,7 +1,7 @@
 .PHONY: deploy dev
 
 deploy:
-	npx wrangler deploy
+	npx cf deploy
 
 dev:
-	npx wrangler dev
+	npx cf dev

@@ -1,0 +1,9 @@
+{
+  "name": "scrollitis",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "cf": "^1.0.0-beta.32",
+    "wrangler": "^4.162.0"
+  }
+}
