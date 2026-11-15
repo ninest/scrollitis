@@ -19,6 +19,18 @@
       gc.dataset.goatcounter = "https://scrollitis.goatcounter.com/count";
       document.head.appendChild(gc);
     }
+
+    // Flock analytics: production key on the live domain, dev key everywhere else (localhost, wrangler dev).
+    {
+      const fl = document.createElement("script");
+      fl.defer = true;
+      fl.src = "https://emotionalsupport.misc.page/flock.js";
+      fl.dataset.key = location.hostname === "scrollitis.misc.page"
+        ? "pk_production_5XjKUr5eU06d4MAio72GKjeO"
+        : "pk_dev_93CgEUVC3qo1aQV0bL2r1TvO";
+      fl.dataset.mode = "cookieless";
+      document.head.appendChild(fl);
+    }
   </script>
 </head>
 <body>

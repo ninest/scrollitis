@@ -422,6 +422,9 @@
 
     trackEvent("score/" + score);
     trackEvent("time/" + totalTime + "s");
+    if (window.flock) {
+      window.flock.track("game_completed", { score, time: totalTime, ads_closed: adsClosed, best: stats.best, new_best: isBest && score > 0 });
+    }
   }
 
   // GoatCounter is only loaded in production (see index.html), and may be blocked.
